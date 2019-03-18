@@ -126,6 +126,15 @@
   },
 
   "Resources": {
+
+  "InstanceProfile" : {
+    "Type" : "AWS::IAM::InstanceProfile",
+    "Properties" : {
+      "Path" : "/",
+      "Roles" : ["Ec2ToS3Role"]
+    }
+  },
+
     "ElasticLoadBalancer": {
       "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
       "Metadata": {
@@ -182,7 +191,7 @@
         "InstanceType": { "Ref": "InstanceType" },
         "SecurityGroups": [{ "Ref": "WebServerSecurityGroup" }],
         "KeyName": { "Ref": "KeyName" },
-
+        "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "UserData": {
           "Fn::Base64": {
             "Fn::Join": [
@@ -193,6 +202,7 @@
                 "yum -y install java-1.8.0\n",
                 "yum -y remove java-1.7.0-openjdk\n",
                 "cd /home/ec2-user\n",
+                "aws s3 cp s3://s3-us-west-2.amazonaws.com/sme-artifact-bucket/SpringDataRestBoot-0.0.1-SNAPSHOT.jar"
                 "curl http://training.conygre.com/allstate/CompactDiscRestDatabase.jar --output app.jar\n",
                 "echo spring.datasource.url=jdbc:mysql://",
                 { "Ref": "DBUrl" },
