@@ -20,7 +20,7 @@ pipeline {
       steps() {
         sh '''
           aws cloudformation create-stack --stack-name smestack --template-body file://sme.template --parameters ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=KeyName,ParameterValue=SMEKey ParameterKey=DBUser,ParameterValue=sme ParameterKey=DBPass,ParameterValue=Pass.123 --region us-west-2
-          aws cloudformation wait stack-update-complete --stack-name smestack --region us-west-2
+          aws cloudformation wait stack-create-complete --stack-name smestack --region us-west-2
           aws cloudformation describe-stack-events --stack-name smestack --region us-west-2 
         '''
       }
